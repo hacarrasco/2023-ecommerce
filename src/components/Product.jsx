@@ -9,9 +9,11 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import tenis from "../assets/img/tenis.jpg";
 import { AddShoppingCart } from "@mui/icons-material";
 import accounting from "accounting";
+import products from '../product_data'
+
+
 
 const ExpandMore = styled((props) => {
   // eslint-disable-next-line no-unused-vars
@@ -25,7 +27,9 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
+
 export default function Product() {
+ 
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -33,14 +37,14 @@ export default function Product() {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345, marginTop:"90px" }}>
       <CardHeader
         action={
           <Typography
             // className={classes.action}
             variant="h5"
             color="textSecondary">
-            {accounting.formatMoney(800)}
+            {accounting.formatMoney(products.price)}
           </Typography>
         }
         title="Shoes"
@@ -48,20 +52,20 @@ export default function Product() {
       />
       <CardMedia
         // className={classes.media}
-        image={tenis}
-        title="Nike shoes"
+        image={products.image}
+        title={products.name}
         style={{ height: "200px", width: "300px" }}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          Running Shoes
+          {products.productType}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to cart">
           <AddShoppingCart />
         </IconButton>
-        {Array(4)
+        {Array(products.rating)
           .fill()
           // eslint-disable-next-line no-unused-vars
           .map((_, i) => (
@@ -78,7 +82,7 @@ export default function Product() {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography>Zapatillas de deporte para correr</Typography>
+          <Typography>{products.description}</Typography>
         </CardContent>
       </Collapse>
     </Card>
