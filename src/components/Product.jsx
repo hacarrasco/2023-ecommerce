@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -11,9 +11,6 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { AddShoppingCart } from "@mui/icons-material";
 import accounting from "accounting";
-import products from '../product_data'
-
-
 
 const ExpandMore = styled((props) => {
   // eslint-disable-next-line no-unused-vars
@@ -27,9 +24,10 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-
-export default function Product() {
- 
+// eslint-disable-next-line react/prop-types
+const Product = ({ product }) => {
+  const { price, image, description, rating, name, productType } =
+    (typeof product !== "undefined" && product) || {};
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -37,35 +35,35 @@ export default function Product() {
   };
 
   return (
-    <Card sx={{ maxWidth: 345, marginTop:"90px" }}>
+    <Card sx={{ maxWidth: 345, marginTop: "90px" }}>
       <CardHeader
         action={
           <Typography
             // className={classes.action}
             variant="h5"
             color="textSecondary">
-            {accounting.formatMoney(products.price)}
+            {accounting.formatMoney(price)}
           </Typography>
         }
-        title="Shoes"
+        title={name}
         subheader="in Stock"
       />
       <CardMedia
         // className={classes.media}
-        image={products.image}
-        title={products.name}
-        style={{ height: "200px", width: "300px" }}
+        image={image}
+        title={name}
+        style={{ height: "200px", width: "280px" }}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {products.productType}
+          {productType}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to cart">
           <AddShoppingCart />
         </IconButton>
-        {Array(products.rating)
+        {Array(rating)
           .fill()
           // eslint-disable-next-line no-unused-vars
           .map((_, i) => (
@@ -82,9 +80,10 @@ export default function Product() {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography>{products.description}</Typography>
+          <Typography>{description}</Typography>
         </CardContent>
       </Collapse>
     </Card>
   );
-}
+};
+export default Product;
