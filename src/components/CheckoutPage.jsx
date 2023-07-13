@@ -1,9 +1,9 @@
 import { makeStyles } from "@mui/styles";
 import Grid from '@mui/material/Grid';
 import  Typography  from "@mui/material/Typography";
-import products from '../product_data';
 import CheckoutCard from './CheckoutCards';
 import Total from "./Total"
+import  { useStateValue } from '../StateProvider'
 
 // eslint-disable-next-line no-unused-vars
 const useStyles = makeStyles((_theme) => ({
@@ -18,13 +18,13 @@ const useStyles = makeStyles((_theme) => ({
 
  const CheckoutPage = () => {
     const classes = useStyles();
+    const [{ basket }, dispatch] = useStateValue();  
 
     const FormRow = () => {
        return (
         <>
            {
-            products.map((item) => (
-                // eslint-disable-next-line react/jsx-key
+            basket?.map((item) => (
                 <Grid item xs={12} sm={8} md={6} lg={4}>
                     <CheckoutCard key={item.id} product={item}/>
                 </Grid>

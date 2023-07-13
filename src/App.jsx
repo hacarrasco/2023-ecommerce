@@ -1,17 +1,20 @@
 import Navbar from "./components/Navbar";
-import Product from "./components/Product";
 import Products from "./components/Products";
-import CheckoutPage from './components/CheckoutPage'
+import CheckoutPage from "./components/CheckoutPage";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <>
-      <Navbar/>
-      <CheckoutPage/>
-      <Products/>
-      <Product/>
-    </>
+    <BrowserRouter>
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route exact path="/" element={<Products/>} />
+          <Route exact path="/checkout-page" element={<CheckoutPage/>} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
-export default App;
+export {App};

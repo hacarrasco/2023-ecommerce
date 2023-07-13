@@ -7,6 +7,8 @@ import Typography from "@mui/material/Typography";
 import accounting from "accounting";
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from "@mui/material/IconButton";
+import  { useStateValue } from '../StateProvider'
+
 
 // eslint-disable-next-line no-unused-vars
 const useStyles = makeStyles((_theme) => ({
@@ -32,11 +34,18 @@ const useStyles = makeStyles((_theme) => ({
 
 // eslint-disable-next-line react/prop-types
 const CheckoutCard = ({ product }) => {
-  const { price, image, rating, name } =
+  const { price, image, rating, name, id } =
     (typeof product !== "undefined" && product) || {};
   const classes = useStyles();
-  
+  const [{ basket }, dispatch] = useStateValue();  
 
+  
+  const removeItem = () => {
+    dispatch({
+      type: "REMOVE_ITEM",
+      id: id
+    })
+  }
 
   return (
     <Card sx={{ maxWidth: 345, marginTop: "90px" }}>
@@ -69,7 +78,7 @@ const CheckoutCard = ({ product }) => {
           ))}
         </div>
         <IconButton>
-        <DeleteIcon fontSize="large"/>
+        <DeleteIcon fontSize="large" onClick={removeItem}/>
         </IconButton>
       
       </CardActions>

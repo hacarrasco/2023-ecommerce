@@ -11,6 +11,9 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { AddShoppingCart } from "@mui/icons-material";
 import accounting from "accounting";
+import  { useStateValue } from '../StateProvider'
+//import { useParams } from "react-router-dom";
+
 
 const ExpandMore = styled((props) => {
   // eslint-disable-next-line no-unused-vars
@@ -26,12 +29,29 @@ const ExpandMore = styled((props) => {
 
 // eslint-disable-next-line react/prop-types
 const Product = ({ product }) => {
-  const { price, image, description, rating, name, productType } =
+  const { price, image, description, rating, name, productType, id } =
     (typeof product !== "undefined" && product) || {};
+  //const { id } = useParams();
+  const [{ basket }, dispatch] = useStateValue();  
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const addToBasket = () => {
+    dispatch({
+      type:"ADD_TO_BASKET",
+      item: {
+        id,
+        name,
+        productType,
+        image,
+        price,
+        rating,
+        description,
+      },
+    });
   };
 
   return (
@@ -60,7 +80,7 @@ const Product = ({ product }) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to cart">
+        <IconButton aria-label="add to cart" onClick={addToBasket}>
           <AddShoppingCart />
         </IconButton>
         {Array(rating)
