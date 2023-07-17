@@ -30,8 +30,9 @@ const ExpandMore = styled((props) => {
 // eslint-disable-next-line react/prop-types
 const Product = ({ product }) => {
   const { price, image, description, rating, name, productType, id } =
+    
     (typeof product !== "undefined" && product) || {};
-  //const { id } = useParams();
+  
   const [{ basket }, dispatch] = useStateValue();  
   const [expanded, setExpanded] = React.useState(false);
 

@@ -12,8 +12,12 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link as RouteLink, useHistory } from 'react-router-dom';
-import "firebase/auth";
+import { Link as RouteLink } from 'react-router-dom';
+import { register } from '../firebase/firebaseAuth'
+
+
+
+
 
 function Copyright(props) {
   return (
@@ -33,32 +37,21 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  
+  const [emailRegister, setEmailRegister] = useState("");
+  const [passwordRegister, setPasswordRegister] = useState("");
+  
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const history = useHistory();
+  
+  const handleRegister = (e) => {
+    e.preventDefault()
+    register(emailRegister, passwordRegister)
+  }
   
 
 
 
-  const signup = (e) => {
-    e.preventDefault();
-    auth.createUserWithEmailAndPassword(email, password)
-    .then((auth) => {
-        if(auth){
-            history.push("/")
-        }
-    })
-    .catch(err => alert(err.message))
-  }
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -78,7 +71,7 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate  onClick={handleRegister} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -103,8 +96,8 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={emailRegister}
+                  onChange={(e) => setEmailRegister(e.target.value)}
                   required
                   fullWidth
                   id="email"
@@ -115,8 +108,8 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={passwordRegister}
+                  onChange={(e) => setPasswordRegister(e.target.value)}
                   required
                   fullWidth
                   name="password"
@@ -138,7 +131,7 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={signup}
+              
             >
               Sign Up
             </Button>
