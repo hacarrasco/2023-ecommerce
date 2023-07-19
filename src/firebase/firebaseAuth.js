@@ -1,4 +1,10 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { 
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword, 
+    GoogleAuthProvider, 
+    signInWithPopup, 
+    signOut 
+     } from "firebase/auth";
 import { auth } from "./firebase.config";
 
 
@@ -21,10 +27,10 @@ export const login = async (email, password) => {
     console.log("bad process")
  }
 }
-debugger
-export const loginWithGoogle = () => {
+
+export const loginWithGoogle = async() => {
     const responseGoogle = new GoogleAuthProvider();
-    return signInWithPopup(auth, responseGoogle)
+    return await signInWithPopup(auth, responseGoogle)
 }
 
 export const logout = async () => {

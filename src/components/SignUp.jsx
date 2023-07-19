@@ -14,6 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as RouteLink } from 'react-router-dom';
 import { register } from '../firebase/firebaseAuth'
+//import { useNavigate } from 'react-router-dom';
 
 
 
@@ -40,12 +41,14 @@ export default function SignUp() {
   
   const [emailRegister, setEmailRegister] = useState("");
   const [passwordRegister, setPasswordRegister] = useState("");
+  //const navigate = useNavigate()
   
 
   
   const handleRegister = (e) => {
     e.preventDefault()
     register(emailRegister, passwordRegister)
+    
   }
   
 
@@ -131,10 +134,10 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              
             >
               Sign Up
             </Button>
+            
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <RouteLink to="/sign-in" variant="body2">

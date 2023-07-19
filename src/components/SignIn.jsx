@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,8 +14,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as RouteLink } from 'react-router-dom';
-import { login } from '../firebase/firebaseAuth';
+import { login, loginWithGoogle } from '../firebase/firebaseAuth';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebase/firebase.config';
+import { onAuthStateChanged } from 'firebase/auth';
+
 
 
 function Copyright(props) {
@@ -38,18 +41,24 @@ const defaultTheme = createTheme();
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate()
+  
+  const navigate = useNavigate();
 
+
+ 
   const handleLogin = (e) => {
     e.preventDefault()
-    login(email, password)
-    if(login){
-      alert("has ingresado con exito")
-      navigate("/")
-    }else {
-      err => alert(err.message)
-    }
+   login(email, password)
+    console.log(login)
+    navigate("/")
   }
+
+  const handleGoogle = async(e) => {
+    e.preventDefault()
+    await loginWithGoogle(auth)
+  }
+
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -106,6 +115,15 @@ export default function SignIn() {
               onClick={(e) => handleLogin(e)}
             >
               Sign In
+            </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mb: 2 }}
+              onClick={(e) => handleGoogle(e)}
+            >
+              continue with Google
             </Button>
             <Grid container>
               <Grid item xs>
