@@ -1,3 +1,4 @@
+import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -10,35 +11,28 @@ import { Link } from "react-router-dom";
 import  { useStateValue } from '../StateProvider'
 import { login, logout } from "../firebase/firebaseAuth";
 import { auth } from "../firebase/firebase.config";
-import { onAuthStateChanged } from 'firebase/auth';
-import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom'
+import { actionTypes } from "../reducer";
 
 
 
 export default function Navbar() {
-  const [{ basket }, dispatch] = useStateValue();  
-  const [user, setUser] = useState("");
-  const {displayName} = user;
-  console.log("🚀 ~ file: Navbar.jsx:22 ~ Navbar ~ displayName:", displayName)
+  const [{ basket, user }, dispatch] = useStateValue();  
   const navigate = useNavigate();
 
  const handleLogOut = () => {
-  logout(auth)
+  if(user) {
+    logout(auth);
+    dispatch({
+      type: actionTypes.EMPTY_BASKET,
+      basket: [],
+    });
+    navigate('/')
+  }
+  
  }
 
- useEffect(() => {
-  const suscribed = onAuthStateChanged(auth, (currentUser) => {
-   if(!currentUser) {
-     console.log("No hay usuario suscrito")
-     setUser("")
-   }else {
-     setUser(currentUser)
-     navigate("/")
-   }
-  })
-  return () => suscribed()
- }, [])
+ 
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -60,27 +54,18 @@ export default function Navbar() {
           </div>
           <div
             style={{ display: "flex", width: "400px", alignItems: "center" }}>
-              {login ? (
                 <Typography variant="h6" color="textPrimary" component="p">
-                {displayName}
-              </Typography>
-              ): null}
+                Hello {user ? user.displayName : "Guest"}
+                </Typography>
             
             <Link to="/sign-in">
             <Button
               style={{ marginLeft: "10px" }}
               color="primary"
-              variant="outlined">
-              <strong> Sign In</strong>
-            </Button>
-            <Button
-              style={{ marginLeft: "10px" }}
-              color="primary"
               variant="outlined"
-              onClick={() => handleLogOut()}
+              onClick={handleLogOut}
               >
-              <strong> Log Out</strong>
-            
+              <strong>{user ? "Sign Out" : "Sign In"}</strong>
             </Button>
             </Link>
            
