@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,10 +14,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as RouteLink } from 'react-router-dom';
-import { login, loginWithGoogle } from '../firebase/firebaseAuth';
+import { login } from '../firebase/firebaseAuth';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebase/firebase.config';
-import { onAuthStateChanged } from 'firebase/auth';
+
+
 
 
 
@@ -53,10 +53,7 @@ export default function SignIn() {
     navigate("/")
   }
 
-  const handleGoogle = async(e) => {
-    e.preventDefault()
-    await loginWithGoogle(auth)
-  }
+  
 
   
 
@@ -116,15 +113,7 @@ export default function SignIn() {
             >
               Sign In
             </Button>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mb: 2 }}
-              onClick={(e) => handleGoogle(e)}
-            >
-              continue with Google
-            </Button>
+            
             <Grid container>
               <Grid item xs>
                 <RouteLink to="/sign-up" variant="body2">

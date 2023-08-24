@@ -9,10 +9,10 @@ import { ShoppingCart } from "@mui/icons-material";
 import { Badge, IconButton } from "@mui/material";
 import { Link } from "react-router-dom";
 import  { useStateValue } from '../StateProvider'
-import { login, logout } from "../firebase/firebaseAuth";
 import { auth } from "../firebase/firebase.config";
 import { useNavigate } from 'react-router-dom'
 import { actionTypes } from "../reducer";
+import { signOut } from "firebase/auth";
 
 
 
@@ -22,10 +22,14 @@ export default function Navbar() {
 
  const handleLogOut = () => {
   if(user) {
-    logout(auth);
+    signOut(auth);
     dispatch({
       type: actionTypes.EMPTY_BASKET,
       basket: [],
+    });
+    dispatch({
+      type: actionTypes.SET_USER,
+      user: null,
     });
     navigate('/')
   }
@@ -55,7 +59,7 @@ export default function Navbar() {
           <div
             style={{ display: "flex", width: "400px", alignItems: "center" }}>
                 <Typography variant="h6" color="textPrimary" component="p">
-                Hello {user ? user.displayName : "Guest"}
+                Hello {user ? user.email : "Guest"}
                 </Typography>
             
             <Link to="/sign-in">
