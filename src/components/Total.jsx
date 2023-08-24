@@ -2,6 +2,7 @@ import accounting from "accounting";
 import Button from "@mui/material/Button";
 import { makeStyles } from "@mui/styles";
 import { useStateValue } from "../StateProvider";
+import { useNavigate } from 'react-router-dom';
 
 // eslint-disable-next-line no-unused-vars
 const useStyles = makeStyles((theme) => ({
@@ -19,12 +20,17 @@ const useStyles = makeStyles((theme) => ({
 
 const Total = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const [{ basket }, dispatch] = useStateValue();
 
   const getBasketTotal = basket.reduce(
     (amount, item) => amount + item.price,
     0
   );
+
+  const handleCheckout = () => {
+    navigate("/checkout")
+  }
 
   return (
     <div className={classes.root}>
@@ -35,7 +41,12 @@ const Total = () => {
           thousand: ",",
         })}
       </h5>
-      <Button className={classes.button} variant="contained" color="secondary">
+      <Button 
+        className={classes.button} 
+        variant="contained" 
+        color="secondary"
+        onClick={handleCheckout}
+        >
         Check out
       </Button>
     </div>
