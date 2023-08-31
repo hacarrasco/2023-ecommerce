@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import { makeStyles } from "@mui/styles";
 import { useStateValue } from "../StateProvider";
 import { useNavigate } from 'react-router-dom';
+import { getBasketTotal } from "../reducer";
 
 // eslint-disable-next-line no-unused-vars
 const useStyles = makeStyles((theme) => ({
@@ -23,10 +24,7 @@ const Total = () => {
   const navigate = useNavigate();
   const [{ basket }, dispatch] = useStateValue();
 
-  const getBasketTotal = basket.reduce(
-    (amount, item) => amount + item.price,
-    0
-  );
+  
 
   const handleCheckout = () => {
     navigate("/checkout")

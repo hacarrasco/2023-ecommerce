@@ -90,7 +90,7 @@ export default function Checkout() {
     setActiveStep(activeStep - 1);
   };
 
-  const Form = () => activeStep === 0 ? <AddressForm/> : <PaymentForm/>
+  const Form = () => activeStep === 0 ? <AddressForm handleNext={handleNext} handleBack={handleBack}/> : <PaymentForm/>
 
   return (
     <React.Fragment>
@@ -101,7 +101,7 @@ export default function Checkout() {
           <Typography component="h1" variant="h4" align="center">
             Checkout
           </Typography>
-          <Stepper activeStep={0} className={classes.stepper}>
+          <Stepper activeStep={activeStep} className={classes.stepper}>
             {steps.map(step => (
               <Step key={step}>
                 <StepLabel>{step}</StepLabel>

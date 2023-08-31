@@ -3,17 +3,25 @@ import { Button, Grid, Typography } from "@material-ui/core";
 import { useForm, FormProvider } from "react-hook-form";
 import AddressInput from "./AddressInput";
 import { Link } from "react-router-dom";
+import { useStateValue } from '../../StateProvider'
+import { actionTypes } from "../../reducer";
 
-const AddressForm = () => {
+const AddressForm = ({ handleNext }) => {
   const methods = useForm();
+  const [{ shippingData }, dispatch] = useStateValue();
+
+
 
   return (
     <>
       <Typography>Shipping Address</Typography>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(data => {
-          console.log("🚀 ~ file: AddressForm.jsx:15 ~ AddressForm ~ data:", data)
-          
+          dispatch({
+            type: actionTypes.SET_SHIPPINGDATA,
+            shippingData: data,
+          });
+          handleNext();
         })}>
           <Grid container spacing={3}>
             <AddressInput required name="firstName" label="First Name" />
