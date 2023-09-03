@@ -12,9 +12,7 @@ export const actionTypes = {
     SET_SHIPPINGDATA: "SET_SHIPPINGDATA"
 }
 
-
-export const getBasketTotal = (basket) => basket?.reduce((amount, item) => item.price + amount, 0);
-
+ export const getBasketTotal =(basket) => basket.reduce((amount, item) => amount + item.price, 0)
 export const reducer = (state, action) => {
     console.log(action)
     switch(action.type){
