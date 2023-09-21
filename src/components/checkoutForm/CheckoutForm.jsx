@@ -1,5 +1,10 @@
-import { Button } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import { CardElement } from "@stripe/react-stripe-js";
+import { getBasketTotal } from "../../reducer";
+import accounting from "accounting";
+import { useStateValue } from "../../StateProvider";
+import { useStripe, useElements, Elements } from '@stripe/react-stripe-js';
+
 
 const CARD_ELEMENT_OPTIONS = {
   iconStyle: "solid",
@@ -23,20 +28,41 @@ const CARD_ELEMENT_OPTIONS = {
 };
 
 const CheckoutForm = ({ handleNext, handleBack }) => {
+  const [{ basket }, dispatch] = useStateValue();
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+   const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card: elements.getElement(CardElement)
+    })
+    console.log("hola mundo")
+  }
+
   return (
-    <form>
+    <form onSubmit={ handleSubmit }>
       <CardElement options={CARD_ELEMENT_OPTIONS} />
+      <br/>
+      <Grid style={{display:"flex", justifyContent:"space-between"}}>
       <Button 
-       variant='outlined'
-       onClick={handleBack}
-       >Back
+      variant='outlined'
+      onClick={handleBack}
+      >Back
+     </Button>
+     <Button 
+      type='submit'
+      variant='contained'
+      color='primary'
+      disabled={false}>
+      Pay {accounting.formatMoney(getBasketTotal(basket), {
+        precision: 0,
+        thousand: ",",
+      })}
       </Button>
-      <Button 
-       type='submit'
-       variant='contained'
-       color='primary'>
-       Pay $40,500
-       </Button>
+      </Grid>
+      
     </form>
   );
 };
