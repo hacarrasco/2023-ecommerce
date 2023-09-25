@@ -1,11 +1,13 @@
 import React from 'react'
 import { Divider, Typography } from '@material-ui/core'
 import Review from './Review'
-import { Elements, CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from './CheckoutForm';
 
-const stripePromise = loadStripe("pk_live_51NmPCBJSaMdd1lRjtdFHNM3qIrPXzTxUxgqh2PbPRSetGHM4EgNFy2YJXuwdyQIox36I5ranDWy12bLh4NyKC6eQ00kPq81ULx")
+const stripePromise = loadStripe("pk_test_51NtEpvK9PReBfGslOHKKIOAGrVFk3Q614Dfln0lROOYsJiJvsK7cl2c7FutEelVkufbtcajfafVKqZlfCI2cRKPY00TADjkQrN")
+
+
 
 const PaymentForm = ({ handleNext, handleBack}) => {
   return (
