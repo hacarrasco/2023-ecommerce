@@ -11,6 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
+import Confirmation from './Confirmation';
+import { useStateValue } from '../../StateProvider';
 
 function Copyright() {
   return (
@@ -63,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const steps = ['Shipping address', 'Payment details'];
+const steps = ['Shipping address', 'Payment details', ];
 
 function getStepContent(step) {
   switch (step) {
@@ -80,6 +82,7 @@ function getStepContent(step) {
 
 export default function Checkout() {
   const classes = useStyles();
+  const [{ paymentMessage }, dispatch] = useStateValue();
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -90,7 +93,7 @@ const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
 
-  const Form = () => activeStep === 0 ? <AddressForm handleNext={handleNext} handleBack={handleBack}/> : <PaymentForm/>
+  const Form = () => activeStep === 0 ? <AddressForm handleNext={handleNext} handleBack={handleBack}/> : <PaymentForm handleNext={handleNext} handleBack={handleBack}/>
 
   return (
     <React.Fragment>
@@ -108,7 +111,8 @@ const handleBack = () => {
               </Step>
             ))}
           </Stepper>
-             <Form/> 
+          {activeStep === steps.length ? (<Confirmation message={paymentMessage}/>) : (<Form step={activeStep}/>)}
+            
         </Paper>
         <Copyright />
       </main>

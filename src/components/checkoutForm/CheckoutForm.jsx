@@ -1,6 +1,7 @@
-  import { Button, Grid } from "@material-ui/core";
+  import { useState } from "react";
+  import { Button, CircularProgress, Grid } from "@material-ui/core";
   import { CardElement } from "@stripe/react-stripe-js";
-  import { getBasketTotal } from "../../reducer";
+  import { actionTypes, getBasketTotal } from "../../reducer";
   import accounting from "accounting";
   import { useStateValue } from "../../StateProvider";
   import { useStripe, useElements } from '@stripe/react-stripe-js';
@@ -9,7 +10,7 @@
 
   const CARD_ELEMENT_OPTIONS = {
     iconStyle: "solid",
-    hidePostalCode: false,
+    hidePostalCode: true,
     style: {
       base: {
         iconColor: "rgb(240, 57, 122",
@@ -29,7 +30,8 @@
   };
 
   const CheckoutForm = ({ handleNext, handleBack }) => {
-    const [{ basket }, dispatch] = useStateValue();
+    const [{ basket, paymentMessage }, dispatch] = useStateValue();
+    const [loading, setLoading] = useState(false)
     const stripe = useStripe();
     const elements = useElements();
 
@@ -39,19 +41,31 @@
         type: "card",
         card: elements.getElement(CardElement)
       });
-
+        setLoading(true);
       if(!error) {
         const { id } = paymentMethod;
         try {
-          const { data } = await axios.post('http://localhost:5173/api/checkout', {
+          const { data } = await axios.post('http://localhost:3001/api/checkout', {
           id,
-          amount: getBasketTotal(basket) * 100
+          amount: getBasketTotal(basket) * 100,
         })
-        console.log("data", data)
+        dispatch({
+          type: actionTypes.SET_PAYMENT_MESSAGE,
+          paymentMessage: data.message
+        });
+        if(data.message === "Succesfull payment") {
+          dispatch({
+            type: actionTypes.EMPTY_BASKET,
+            basket: [],
+          })
+        }
+        elements.getElement(CardElement).clear();
+        handleNext();
         } catch (error) {
           console.log(error)
+          handleNext();
         }
-        
+        setLoading(false)
       }
       
     }
@@ -71,10 +85,7 @@
         variant='contained'
         color='primary'
         disabled={false}>
-        Pay {accounting.formatMoney(getBasketTotal(basket), {
-          precision: 0,
-          thousand: ",",
-        })}
+       {loading ? (<CircularProgress/>) : (`Pay ${accounting.formatMoney(getBasketTotal(basket), '')}`)}
         </Button>
         </Grid>
         

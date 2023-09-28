@@ -16,21 +16,23 @@ app.use(express.json())
 
 
 app.post('/api/checkout', async (req, res) => {
- try {
-  const { id, amount } = req.body
- 
- const payment = await stripe.paymentIntents.create({
+ console.log(req.body)
+ const { id, amount } = req.body
+  try{
+  const payment = await stripe.paymentIntents.create({
   amount,
-  currency: "",
-  description: "",
+  currency: "USD",
+  description: "Basket of products",
   payment_method: id,
+  payment_method_types
+  : ['card'],
   confirm: true
  })
  console.log(payment)
- res.send({message: 'Succesfull payment'})
+ return res.status(200).json({message: 'Succesfull payment'})
  } catch (error) {
   console.log(error);
-  res.json({message: error})
+  return res.json({message: error.raw.message})
  }
 })
 
