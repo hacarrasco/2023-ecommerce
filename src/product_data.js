@@ -38,7 +38,7 @@
         },
         {
             id: 5,
-            name: "iphone 14 pro",
+            name: "iphone 15 pro",
             productType: "Smartphone",
             price: 33900,
             rating: 5,
